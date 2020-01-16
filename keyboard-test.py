@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from PIL import ImageTk, Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 
 from papirus import Papirus
-
 
 
 WHITE = 255
@@ -38,11 +37,11 @@ class KeyboardView():
 class ChatApp():
 
     def __init__(self):
-        papirus = Papirus(180)
+        papirus = Papirus(rotation=180)
         papirus.clear()
         width = 200
         height = 96
-        self.configure(bg='red')
+
         im = Image.new('1', (width, height), WHITE)
        
         draw = ImageDraw.Draw(im)
