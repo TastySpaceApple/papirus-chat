@@ -1,0 +1,65 @@
+# -*- coding: utf-8 -*-
+from PIL import Image, ImageDraw, ImageFont
+
+
+from papirus import Papirus
+
+
+WHITE = 255
+BLACK = 0
+
+class KeyboardView():
+    def __init__(self, position, size, color=255, bgcolor=1, font_size = 10):
+        self.size = size
+        self.position = position
+        self.rect = (position[0], position[1], position[0] +size[0], position[1]+size[1])
+        self.characters = (reversed((u'[]', u'א', u'ב', u'ג', u'ד')),
+                           reversed((u'ה', u'ו', u'ז', u'ח', u'ט')),
+                           reversed((u'י', u'כ', u'ל', u'מ', u'נ')),
+                           reversed((u'ס', u'ע', u'פ', u'צ', u'ק')),
+                           reversed((u'ר', u'ש', u'ת')))
+        self.pointer_character = u"|";
+        self.color = color;
+        self.bgcolor = bgcolor;
+        self.font_size = font_size
+        self.font = ImageFont.truetype('Heebo-Regular.ttf', font_size, encoding="utf-8")
+
+    def draw(self, draw):
+        draw.rectangle(self.rect, fill=self.bgcolor)
+        bottomY = self.position[1] + self.size[1]
+        for col in range(len(self.characters)):
+            text = "".join(self.characters[col])
+            (textwidth, textheight) = draw.textsize(text, font=self.font)
+            leftX = self.size[0] - col*35 - 30
+            draw.text((leftX - textwidth / 2, bottomY - self.font_size * 2), text , fill=self.color, font=self.font)
+            draw.text((leftX, bottomY - self.font_size), self.pointer_character , fill=self.color, font=self.font)
+
+class ChatApp():
+
+    def __init__(self):
+        papirus = Papirus([rotation=180])
+        papirus.clear()
+        width = 200
+        height = 96
+        self.configure(bg='red')
+        im = Image.new('1', (width, height), WHITE)
+       
+        draw = ImageDraw.Draw(im)
+        
+        keyboard_height = 30
+        keyboard_view = KeyboardView(
+            (0, height - keyboard_height),
+            (width, keyboard_height),
+            color=WHITE, bgcolor=BLACK)
+        
+        keyboard_view.draw(draw)
+        
+        del draw
+        
+        papirus.display(im)
+        papirus.update()
+
+
+    
+if __name__ == "__main__":
+    app = ChatApp()
