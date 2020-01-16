@@ -35,11 +35,11 @@ class KeyboardView():
             draw.text((leftX - textwidth / 2, bottomY - self.font_size * 2), text , fill=self.color, font=self.font)
             draw.text((leftX, bottomY - self.font_size), self.pointer_character , fill=self.color, font=self.font)
 
-class App():
+class ChatApp():
 
     def __init__(self):
         papirus = Papirus(180)
-        
+        papirus.clear()
         width = 200
         height = 96
         self.configure(bg='red')
@@ -57,9 +57,10 @@ class App():
         
         del draw
         
-        papirus.display(180)
+        papirus.display(im)
+        papirus.update()
 
 
     
 if __name__ == "__main__":
-    app = App()
+    app = ChatApp()
