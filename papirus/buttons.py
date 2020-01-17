@@ -7,43 +7,29 @@ SW3 = 20
 SW4 = 19
 SW5 = 26
 
-import threading
 import time
 
-class PapirusButtonsHandler(threading.Thread):
+class PapirusButtonsHandler():
     def __init__(self):
-        threading.Thread.__init__(self)
         self.buttons_pins = [SW5, SW4, SW3, SW2, SW1]
         self.lastValues = [False, False, False, False, False]
-        self.listeners = []
         self.running = False
-	self.setup()
+	    self.setup()
 
     def setup(self):
         GPIO.setmode(GPIO.BCM)
         for pin in self.buttons_pins:
             GPIO.setup(pin, GPIO.IN)
 
-    def add_listener(self, listener):
-        self.listeners.append(listener)
-        if not self.running:
-            self.run()
+    def getButtonClicked(self):
+        values = [GPIO.input(pin) == False for pin in self.buttons_pins]
+        bclicked = False
+        #numButtonsPressed = sum(1 if buttonValue == True else 0 for buttonValue in values)
 
-    def notifyPress(self, buttonIndex):
-	print "button pressed " + str(buttonIndex)
-        for listener in self.listeners:
-            listener(buttonIndex)
+        for buttonIndex in range(len(values)):
+            if self.lastValues[buttonIndex] == True and values[buttonIndex] == False:
+            	bclicked = buttonIndex
+                break
 
-    def run(self):
-        self.running = True
-        while True:
-            values = [GPIO.input(pin) == False for pin in self.buttons_pins]
-	    print values
-            #numButtonsPressed = sum(1 if buttonValue == True else 0 for buttonValue in values)
-
-            for buttonIndex in range(len(values)):
-                if self.lastValues[buttonIndex] == True and values[buttonIndex] == False:
-                	self.notifyPress(buttonIndex)
-
-            self.lastValues = values
-	    time.sleep(1)
+        self.lastValues = values
+	    return buttonIndex

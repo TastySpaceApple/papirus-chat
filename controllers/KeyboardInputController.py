@@ -20,7 +20,7 @@ class KeyboardInputController():
         else:
             return self.keyboardLayout[self.hierarchy]
 
-    def button_press(self, buttonIndex):
+    def button_click(self, buttonIndex):
         if self.hierarchy == -1:
             self.hierarchy = buttonIndex
         else:

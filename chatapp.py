@@ -6,6 +6,7 @@ from papirus import Papirus
 from papirus import PapirusButtonsHandler
 from views import ButtonsLabelsView
 from controllers import KeyboardInputController
+import time
 
 WHITE = 255
 BLACK = 0
@@ -17,7 +18,6 @@ class ChatApp():
         #self.papirus.clear()
 
         self.buttons = PapirusButtonsHandler()
-        self.buttons.add_listener(self.button_press)
 
         self.width = 200
         self.height = 96
@@ -30,7 +30,7 @@ class ChatApp():
             color=WHITE, bgcolor=BLACK)
 
         # controllers
-	self.keyboard = KeyboardInputController()
+	    self.keyboard = KeyboardInputController()
 
         #firstdraw
         self.draw(True)
@@ -41,21 +41,25 @@ class ChatApp():
         draw = ImageDraw.Draw(im)
 
         self.buttons_labels_view.set_labels(keyboard.get_labels)
-	self.buttons_labels_view.draw(draw)
+	    self.buttons_labels_view.draw(draw)
 
         del draw
-	
+
         #self.papirus.display(im)
         #if first_draw:
         #    self.papirus.update()
         #else:
         #    self.papirus.partial_update()
 
-    def button_press(self, buttonIndex):
-        self.keyboard.button_press(buttonIndex)
-        self.draw()
+    def run(self):
+        while True:
+            if (btn_clicked = self.buttons.getButtonClicked()) is not False:
+                self.keyboard.button_press(btn_clicked)
+            self.draw()
+            time.sleep(0.2)
 
 
 
 if __name__ == "__main__":
-    app = ChatApp()
+    chatapp = ChatApp()
+    chatappapp.run()
