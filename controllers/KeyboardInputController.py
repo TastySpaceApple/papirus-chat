@@ -24,4 +24,8 @@ class KeyboardInputController():
         if self.hierarchy == -1:
             self.hierarchy = buttonIndex
         else:
+            self.character_entered(self.keyboardLayout[self.hierarchy][buttonIndex])
             self.hierarchy = -1
+
+    def character_entered(self, character):
+        print("character entered " + character)

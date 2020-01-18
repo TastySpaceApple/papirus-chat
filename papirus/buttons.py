@@ -8,28 +8,37 @@ SW4 = 19
 SW5 = 26
 
 import time
+import threading
 
-class PapirusButtonsHandler():
+class PapirusButtonsHandler(threading.Thread()):
     def __init__(self):
         self.buttons_pins = [SW5, SW4, SW3, SW2, SW1]
         self.lastValues = [False, False, False, False, False]
         self.running = False
-	    self.setup()
+        self.setup()
 
     def setup(self):
         GPIO.setmode(GPIO.BCM)
         for pin in self.buttons_pins:
             GPIO.setup(pin, GPIO.IN)
 
-    def getButtonClicked(self):
-        values = [GPIO.input(pin) == False for pin in self.buttons_pins]
-        bclicked = False
-        #numButtonsPressed = sum(1 if buttonValue == True else 0 for buttonValue in values)
+    def add_listener(self, listener):
+        self.listeners.append(listener)
+        if not self.running:
+            self.run()
 
-        for buttonIndex in range(len(values)):
-            if self.lastValues[buttonIndex] == True and values[buttonIndex] == False:
-            	bclicked = buttonIndex
-                break
+    def button_press(self, buttonIndex):
+        print("press " + str(buttonIndex))
 
-        self.lastValues = values
-	    return buttonIndex
+    def run(self):
+        while True:
+            values = [GPIO.input(pin) == False for pin in self.buttons_pins]
+            #numButtonsPressed = sum(1 if buttonValue == True else 0 for buttonValue in values)
+
+            for buttonIndex in range(len(values)):
+                if self.lastValues[buttonIndex] == True and values[buttonIndex] == False:
+                	self.button_press(buttonIndex)
+                    break
+
+            self.lastValues = values
+            time.sleep(0.3)
