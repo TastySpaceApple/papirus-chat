@@ -10,8 +10,9 @@ SW5 = 26
 import time
 import threading
 
-class PapirusButtonsHandler(threading.Thread()):
+class PapirusButtonsHandler(threading.Thread):
     def __init__(self):
+	threading.Thread.__init__(self)
         self.buttons_pins = [SW5, SW4, SW3, SW2, SW1]
         self.lastValues = [False, False, False, False, False]
         self.running = False
@@ -38,7 +39,7 @@ class PapirusButtonsHandler(threading.Thread()):
             for buttonIndex in range(len(values)):
                 if self.lastValues[buttonIndex] == True and values[buttonIndex] == False:
                 	self.button_press(buttonIndex)
-                    break
+                	break
 
             self.lastValues = values
             time.sleep(0.3)

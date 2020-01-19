@@ -14,11 +14,13 @@ class PapirusSystem():
         def __init__(self):
             self.papirus = Papirus(rotation=180)
             self.papirus.clear()
+	    self.first_draw = True
 
         def update(self, im):
             self.papirus.display(im)
-            if first_draw:
+            if self.first_draw:
                 self.papirus.update()
+		self.first_draw = False
             else:
                 self.papirus.partial_update()
 
