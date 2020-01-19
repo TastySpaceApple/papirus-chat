@@ -42,4 +42,4 @@ class PapirusButtonsHandler(threading.Thread):
                 	break
 
             self.lastValues = values
-            time.sleep(0.3)
+            time.sleep(0.1)

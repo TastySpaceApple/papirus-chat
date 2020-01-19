@@ -36,4 +36,4 @@ class PapirusSystem():
 
 if __name__ == "__main__":
     system = PapirusSystem()
-    system.start()
+    #system.start()
